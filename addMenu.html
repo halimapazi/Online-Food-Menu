@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add New Menu Item</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FEE2E8;
+            padding: 20px;
+        }
+
+        .container {
+            width: 400px;
+            margin: 20px auto;
+            background-color: #FFF5F9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #D81B60;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #D81B60;
+        }
+
+        input[type="text"], [type="number"], textarea, select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #F8BBD0;
+            border-radius: 4px;
+            background-color: #FCE4EC;
+            color: #000;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .btn {
+            display: block;
+            width: 70%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #D81B60;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #AD1457;
+        }
+
+        #menuPhoto {
+            display: none;
+        }
+
+        #preview {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        #preview img {
+            max-width: 200px;
+            height: auto;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="menuform">
+            <h2>Add New Menu Item</h2>
+            <input type="hidden" id="menuId" />
+            <label for="menuName">Menu Name:</label>
+            <input type="text" id="menuName" placeholder="Enter menu name">
+
+            <label for="menuCategory">Menu Category:</label>
+            <select name="menuCategory" id="menuCategory">
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Drink">Drink</option>
+            </select>
+
+            <label for="menuDescription">Menu Description:</label>
+            <textarea id="menuDescription" placeholder="Enter menu description"></textarea>
+
+            <label for="menuPrice">Menu Price:</label>
+            <input type="number" id="menuPrice" placeholder="Enter menu price">
+
+            <button type="submit" class="btn">Add Menu Item</button>
+        </form>
+        <button class="btn" onclick="cancelForm()">Cancel</button>
+    </div>
+
+    <script>
+        document.getElementById('menuform').addEventListener('submit', function(event) {
+            event.preventDefault();
+            submitForm();
+        });
+
+        function submitForm() {
+            var menuData = {
+                name: document.getElementById("menuName").value,
+                category: document.getElementById("menuCategory").value,
+                description: document.getElementById("menuDescription").value,
+                price: parseFloat(document.getElementById("menuPrice").value)
+            };
+
+
+                fetch("http://localhost:8080/api/menu", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(menuData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert("Menu added successfully");
+                    document.getElementById("menuform").reset();
+                    window.location.href = "index.html";
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Failed to add Menu");
+                });
+            }
+        
+
+        function cancelForm() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

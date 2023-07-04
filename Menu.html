@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Restaurant Menu</title>
+  <style>
+    body {
+      background-color: #fce4ec;
+      color: #000;
+      font-family: Arial, sans-serif;
+    }
+    
+    .header {
+      background-color: #ff80ab;
+      padding: 10px;
+      text-align: center;
+      color: #000;
+    }
+    
+    .menuTableBody {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .scrolling-text {
+      overflow: hidden;
+      white-space: nowrap;
+      animation: scroll-left 10s linear infinite;
+    }
+    
+    .table-item {
+      border: 1px solid #ff4081;
+      padding: 20px;
+      text-align: center;
+      width: 600px; /* Adjust the width as needed */
+    }
+    
+    .table-item h2,
+    .table-item p {
+      margin: 0;
+    }
+    
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1 class="scrolling-text">Welcome to Our Restaurant</h1>
+  </div>
+  
+  <div class="menuTableBody" id="menuTableBody">
+    
+  </div>
+
+  <script>
+    
+    fetch("http://localhost:8080/api/menu")
+      .then(response => response.json())
+      .then(data => {
+        const menuTableBody = document.getElementById("menuTableBody");
+        menuTableBody.innerHTML = "";
+
+        data.forEach(menu => {
+          const tableItem = document.createElement("div");
+          tableItem.className = "table-item";
+
+          const nameCell = document.createElement("h2");
+          nameCell.textContent = menu.name;
+          tableItem.appendChild(nameCell);
+
+          const descriptionCell = document.createElement("p");
+          descriptionCell.textContent = menu.description;
+          tableItem.appendChild(descriptionCell);
+
+          const priceCell = document.createElement("p");
+          priceCell.textContent = menu.price;
+          tableItem.appendChild(priceCell);
+
+          menuTableBody.appendChild(tableItem);
+        });
+      })
+      .catch(error => {
+        console.error("Error", error);
+        alert("Failed to fetch Menus");
+      });
+
+  </script>
+</html>

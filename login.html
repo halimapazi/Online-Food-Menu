@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Page</title>
+  <style>
+    body {
+      background-color: #FFE4E1;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #FF1493;
+      background-color: #FFC0CB;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #FF69B4;
+      font-weight: bold;
+    }
+
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #FF69B4;
+      border-radius: 4px;
+    }
+
+    .form-group input[type="submit"] {
+      background-color: #FF69B4;
+      color: #FFFFFF;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .register-link,
+    .login-link {
+      color: #FF1493;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Login here!</h1>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Login">
+      </div>
+    </form>
+    <p>If you don't have an account, <a href="register.html" class="register-link">register</a>.</p>
+  </div>
+
+  <script>
+    var loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+
+      // Check if email and password match the stored values
+      var storedEmail = localStorage.getItem('email');
+      var storedPassword = localStorage.getItem('password');
+      if (email === storedEmail && password === storedPassword) {
+        
+        window.location.href = 'index.html';
+      } else {
+        alert('Login failed. Invalid email or password.');
+      }
+    });
+
+    var registerLink = document.querySelector('.register-link');
+    registerLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      
+      window.location.href = 'register.html';
+    });
+
+    var loginLink = document.querySelector('.login-link');
+    loginLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      alert('Redirect to login page');
+
+      
+    });
+  </script>
+</body>
+</html>

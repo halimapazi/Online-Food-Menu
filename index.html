@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Administrator Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f2f2f2; /* Light gray background color */
+      padding: 20px;
+      color: #000; /* Black text color */
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 32px;
+      color: #ff1493; /* Bright pink heading color */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th {
+      background-color: #ffb6c1; /* Light pink header background color */
+      color: #ff1493; /* Bright pink header text color */
+      padding: 10px;
+    }
+
+    td {
+      background-color: #ffe4e6; /* Lighter pink cell background color */
+      padding: 10px;
+    }
+
+    .menu-actions a {
+      background-color: #ff1493; /* Bright pink button background color */
+      color: #fff; /* White button text color */
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+      margin: 0 5px;
+    }
+
+    .menu-actions a:hover {
+      background-color: #ff007f; 
+    }
+
+    .add-menu-button {
+      margin-bottom: 20px;
+    }
+
+    .add-menu-button a {
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: #ff1493; /* Bright pink button background color */
+      color: #fff; /* White button text color */
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    .deletebtn{
+      background-color: red;
+      color: white;
+      margin-left: 5px;
+    }
+    .editbtn{
+      background-color: green;
+      color: white;
+      margin-left: 5px;
+    }
+
+    .add-menu-button a:hover {
+      background-color: #ff007f; /*  */
+    }
+  </style>
+</head>
+<body>
+  <h1>Menu Available</h1>
+
+  <div class="add-menu-button">
+    <a href="addMenu.html">ADD NEW MENU</a>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="menuTableBody">
+      
+    </tbody>
+  </table>
+
+  <script>
+    
+    fetch("http://localhost:8080/api/menu")
+      .then(response => response.json())
+      .then(data => {
+        const menuTableBody = document.getElementById('menuTableBody');
+
+        data.forEach(menu => {
+          const row = document.createElement('tr');
+
+          const idCell = document.createElement('td');
+          idCell.textContent = menu.id;
+          row.appendChild(idCell);
+
+          const nameCell = document.createElement('td');
+          nameCell.textContent = menu.name;
+          row.appendChild(nameCell);
+
+          const descriptionCell = document.createElement('td');
+          descriptionCell.textContent = menu.description;
+          row.appendChild(descriptionCell);
+
+          const priceCell = document.createElement('td');
+          priceCell.textContent = menu.price;
+          row.appendChild(priceCell);
+
+          const actionCell = document.createElement('td');
+          const editButton = document.createElement('button');
+          editButton.className = 'editbtn';
+          editButton.textContent = 'EDIT';
+          editButton.addEventListener('click', function () {
+            editMenu(menu.id);
+            
+          })
+          actionCell.appendChild(editButton);
+
+          const deleteButton = document.createElement('button');
+          deleteButton.className = 'deletebtn';
+          deleteButton.textContent = 'DELETE';
+          deleteButton.addEventListener('click', function () {
+            deleteMenu(menu.id);
+          });
+          actionCell.appendChild(deleteButton);
+
+          row.appendChild(actionCell);
+
+          menuTableBody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error("Error", error);
+        alert("Failed to fetch Menus");
+      });
+
+    // Delete menu by ID
+    function deleteMenu(menuId) {
+      fetch(`http://localhost:8080/api/menu/${menuId}`, {
+        method: "DELETE"
+      })
+        .then(response => {
+          if (response.ok) {
+            alert("Menu deleted successfully");
+            location.reload(); // Refresh the page after successful deletion
+          } else {
+            alert("Failed to delete menu");
+          }
+        })
+        .catch(error => {
+          console.error("Error", error);
+          alert("Failed to delete menu");
+        });
+    }
+    function editMenu(menuId) {
+      window.location.href = "addMenu.html?id=" + menuId;
+    }
+  </script>
+</body>
+</html>
